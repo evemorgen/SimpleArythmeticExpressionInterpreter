@@ -30,7 +30,6 @@ class Token(object):
     def __init__(self, type, value):
         self.type = type
         self.value = value
-        print(self)
 
     def __str__(self):
         return 'Token({type}, {value})'.format(
@@ -44,7 +43,6 @@ class Interpreter(object):
         self.text = text.replace(' ', '')  # skip all spaces
         self.pos = 0
         self.current_token = None
-        print(self.text)
 
     def error(self):
         print('Unexpected token {0} at {1}'.format(self.current_token.type, self.pos - 1))
@@ -54,7 +52,6 @@ class Interpreter(object):
         text = self.text
 
         if self.pos > len(text) - 2:
-            print("returning EOF")
             return Token(EOF, None)
 
         current_char = text[self.pos]
@@ -75,7 +72,6 @@ class Interpreter(object):
         self.error()
 
     def eat(self, token_type):
-        print("zjadam: %s" % token_type)
         if isinstance(token_type, str):
             token_type = [token_type]
         if self.current_token.type in token_type:
@@ -87,14 +83,12 @@ class Interpreter(object):
         result = None
         self.current_token = self.get_next_token()
         left = self.current_token
-        print("tutaj pos jest: %s" % self.pos)
         if self.pos == len(self.text) - 1:
             eof = self.get_next_token()
             self.eat(INTEGER)
             return left.value
 
         self.eat(INTEGER)
-        print("tutaj pos jest: %s" % self.pos)
         while self.pos < len(self.text) - 1:
             op = self.current_token
             self.eat(sign_to_token.values())
@@ -124,8 +118,7 @@ def main():
     for text in sys.stdin:
         interpreter = Interpreter(text)
         result = interpreter.expr()
-        print("wynik: %s" % result)
+        print(interpreter.expr())
 
 if __name__ == '__main__':
-
     main()
