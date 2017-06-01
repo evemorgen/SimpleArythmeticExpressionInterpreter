@@ -1,41 +1,64 @@
 import sys
+import logging
 
-from .constants import INTEGER, EOF
-from .constants import sign_to_token, operators
-from .token import Token
+from constants import INTEGER, EOF
+from constants import sign_to_token, operators, brackets
+from my_token import Token
 
 
 class Interpreter(object):
+
     def __init__(self, text):
         self.text = text.replace(' ', '')  # skip all spaces
-        self.pos = 0
+        logging.debug("trimming spaces from string, before: '%s', after: '%s'", text, self.text)
+        self.token_list = []
         self.current_token = None
+        self.current_token_number = 0
 
-    def error(self):
-        print('Unexpected token {0} at {1}'.format(self.current_token.type, self.pos - 1))
+    def error(self, token, pos):
+        print('Unexpected token {0} at {1}'.format(token, pos))
         sys.exit(-1)
 
-    def get_next_token(self):
-        text = self.text
+    def get_multidigit_integer(self, start_pos):
+        logging.debug("trying to match multidigit integer from position %s", start_pos)
+        end_pos = start_pos
+        while self.text[end_pos].isdigit() and end_pos < len(self.text) - 1:
+            end_pos += 1
+        if end_pos == len(self.text) - 1:
+            logging.debug("found %s at text[%s:], at the end of text", self.text[start_pos:], start_pos)
+            return (self.text[start_pos:], end_pos)
+        else:
+            logging.debug("found %s at text[%s:%s]", self.text[start_pos:end_pos], start_pos, end_pos)
+            return (self.text[start_pos:end_pos], end_pos)
 
-        if self.pos > len(text) - 2:
-            return Token(EOF, None)
+    def find_tokens(self):
+        current_pos = 0
+        while current_pos < len(self.text) - 1:
+            if self.text[current_pos].isdigit() is True:
+                logging.debug("found first digit of a integer, trying to pare whole of it")
+                value, current_pos = self.get_multidigit_integer(current_pos)
+                self.token_list.append(Token(INTEGER, value))
+            elif self.text[current_pos] in operators:
+                logging.debug("found operator '%s', creating token", self.text[current_pos])
+                operator_token = sign_to_token[self.text[current_pos]]
+                self.token_list.append(Token(operator_token, None))
+                current_pos += 1
+            elif self.text[current_pos] in brackets:
+                logging.debug("found bracket '%s', creating token", self.text[current_pos])
+                bracket = brackets[self.text[current_pos]]
+                self.token_list.append(Token(bracket, None))
+                current_pos += 1
+            else:
+                logging.debug("something terribly wrong happend, cannot match this character: %s", self.text[current_pos])
+                self.error("'{}'".format(self.text[current_pos]), current_pos)
 
-        current_char = text[self.pos]
-        if current_char.isdigit():
-            start_pos = self.pos
-            while current_char.isdigit() and self.pos < len(text) - 1:
-                self.pos += 1
-                current_char = text[self.pos]
-            token = Token(INTEGER, int(text[start_pos:self.pos] if self.pos < len(text) - 1 else text[start_pos:]))
-            return token
+        logging.debug("parsed whole string, adding EOF to token list")
+        self.token_list.append(Token(EOF, None))
 
-        if current_char in sign_to_token:
-            token = Token(sign_to_token[current_char], current_char)
-            self.pos += 1
-            return token
-
-        self.error()
+    def get_current_token(self):
+        token = self.token_list[self.current_token_number]
+        self.current_token_number += 1
+        return token
 
     def eat(self, token_type):
         if isinstance(token_type, str):

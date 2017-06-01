@@ -5,6 +5,8 @@ PLUS = 'ADD'
 MINUS = 'SUB'
 MULTIPLY = 'MUL'
 DIVIDE = 'DIV'
+LEFT_BRACKET = 'OPENING_BRACKET'
+RIGHT_BRACKET = 'CLOSING_BRACKET'
 EOF = 'END'
 
 operators = {
@@ -19,6 +21,11 @@ sign_to_token = {
     '-': MINUS,
     '*': MULTIPLY,
     '/': DIVIDE
+}
+
+brackets = {
+    '(': LEFT_BRACKET,
+    ')': RIGHT_BRACKET
 }
 
 FORMAT = '\033[1;31m[%(asctime)s]\033[32m[%(module)s/%(funcName)s/%(lineno)s]\033[1;0m %(message)s'

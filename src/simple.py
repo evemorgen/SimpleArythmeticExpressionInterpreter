@@ -2,8 +2,8 @@ import sys
 import logging
 import argparse
 
-from .constants import FORMAT
-from .interpreter import Interpreter
+from constants import FORMAT
+from interpreter import Interpreter
 
 
 def main():
@@ -19,12 +19,12 @@ def main():
     if args.execute is not None:
         logging.debug("taking inline expression")
         interpreter = Interpreter(args.execute)
-        print(interpreter.expr())
-
-    logging.debug("getting expression from stdin")
-    for text in sys.stdin:
-        interpreter = Interpreter(text)
-        print(interpreter.expr())
+        print(interpreter.find_tokens())
+    else:
+        logging.debug("getting expression from stdin")
+        for text in sys.stdin:
+            interpreter = Interpreter(text)
+            print(interpreter.get_multidigit_integer(0))
 
 if __name__ == '__main__':
     main()
