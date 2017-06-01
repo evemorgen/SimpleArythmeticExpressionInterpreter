@@ -3,4 +3,4 @@ BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
 URED='\033[4;31m'
 NC='\033[0m' # No Color
-printf "This is ${URED}ain't java${RED}, no need to build or compile.${NC} Keep lovin ${BLUE}Pyt${YELLOW}hon${NC} :)"
+printf "This is ${URED}ain't java${RED}, no need to build or compile.${NC} Keep lovin ${BLUE}Pyt${YELLOW}hon${NC} :)\n"
