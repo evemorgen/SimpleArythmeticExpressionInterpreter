@@ -57,14 +57,13 @@ class Interpreter(object):
 
     def get_current_token(self):
         token = self.token_list[self.current_token_number]
-        self.current_token_number += 1
         return token
 
     def eat(self, token_type):
         if isinstance(token_type, str):
             token_type = [token_type]
         if self.current_token.type in token_type:
-            self.current_token = self.get_next_token()
+            self.current_token = self.get_current_token()
         else:
             self.error()
 
