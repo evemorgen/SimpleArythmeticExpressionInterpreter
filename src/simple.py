@@ -2,7 +2,7 @@ import sys
 import logging
 import argparse
 
-from constants import FORMAT
+from constants import FORMAT, EOF
 from interpreter import Interpreter
 
 
@@ -18,13 +18,16 @@ def main():
 
     if args.execute is not None:
         logging.debug("-e provided, taking inline expression")
-        interpreter = Interpreter(args.execute)
-        print(interpreter.expr())
+        text = args.execute
     else:
         logging.debug("no arguments provided, getting expression from stdin")
-        for text in sys.stdin:
-            interpreter = Interpreter(text)
-            print(int(interpreter.expr()))
+        text = next(sys.stdin)
+
+    interpreter = Interpreter(text)
+    res = int(interpreter.expr())
+    if interpreter.current_token.type != EOF:
+        interpreter.error(interpreter.current_token, interpreter.current_token_number)
+    print(res)
 
 
 if __name__ == '__main__':

@@ -110,6 +110,4 @@ class Interpreter(object):
     def expr(self):
         """expr   : term ((PLUS | MINUS) term)*"""
         result = self.template(self.term, [PLUS, MINUS])
-        if self.current_token_number != len(self.token_list) - 1:
-            self.error(self.current_token, self.current_token_number+1)
         return result
