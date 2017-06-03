@@ -95,7 +95,11 @@ class Interpreter(object):
         while self.current_token.type in token_list:
             token = self.current_token
             self.eat(token_list)
-            result = operators[tokens[token.type]](result, function())
+            try:
+                result = operators[tokens[token.type]](result, function())
+            except ZeroDivisionError:
+                sys.stderr.write('Division by 0.')
+                sys.exit(-1)
             logging.debug("calculating **%s**, partial result is: %s", function.__name__, result)
         return result
 
