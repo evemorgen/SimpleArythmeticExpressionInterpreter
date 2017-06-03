@@ -23,6 +23,8 @@ sign_to_token = {
     '/': DIVIDE
 }
 
+tokens = {v: k for k, v in sign_to_token.items()}
+
 brackets = {
     '(': LEFT_BRACKET,
     ')': RIGHT_BRACKET

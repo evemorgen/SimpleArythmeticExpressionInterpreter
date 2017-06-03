@@ -14,17 +14,18 @@ def main():
 
     if args.verbose is True:
         logging.basicConfig(level=logging.DEBUG, format=FORMAT, datefmt="%H:%M:%S")
-        logging.warning("running in debug mode")
+        logging.warning("-v provided, running in debug mode")
 
     if args.execute is not None:
-        logging.debug("taking inline expression")
+        logging.debug("-e provided, taking inline expression")
         interpreter = Interpreter(args.execute)
-        print(interpreter.find_tokens())
+        print(interpreter.expr())
     else:
-        logging.debug("getting expression from stdin")
+        logging.debug("no arguments provided, getting expression from stdin")
         for text in sys.stdin:
             interpreter = Interpreter(text)
             print(interpreter.get_multidigit_integer(0))
+
 
 if __name__ == '__main__':
     main()
