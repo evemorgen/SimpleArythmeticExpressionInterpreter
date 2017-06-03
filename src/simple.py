@@ -24,7 +24,7 @@ def main():
         logging.debug("no arguments provided, getting expression from stdin")
         for text in sys.stdin:
             interpreter = Interpreter(text)
-            print(interpreter.get_multidigit_integer(0))
+            print(int(interpreter.expr()))
 
 
 if __name__ == '__main__':

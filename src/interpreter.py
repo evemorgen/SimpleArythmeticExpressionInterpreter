@@ -11,7 +11,7 @@ from my_token import Token
 class Interpreter(object):
 
     def __init__(self, text):
-        self.text = text.replace(' ', '')
+        self.text = text.replace(' ', '').strip()
         logging.debug("trimming spaces from string, before: '%s', after: '%s'", text, self.text)
         self.token_list = []
         self.find_tokens()
