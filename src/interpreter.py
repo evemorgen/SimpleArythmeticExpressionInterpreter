@@ -19,7 +19,7 @@ class Interpreter(object):
         self.current_token_number = 0
 
     def error(self, token, pos):
-        print('Unexpected token {0} at {1}'.format(token, pos))
+        print('Unexpected token {0} at {1}'.format(token.type, pos))
         sys.exit(-1)
 
     def get_multidigit_integer(self, start_pos):
@@ -87,6 +87,7 @@ class Interpreter(object):
             result = self.expr()
             self.eat(RIGHT_BRACKET)
             return result
+        self.error(self.current_token, self.current_token_number)
 
     def template(self, function, token_list):
         logging.debug("trying to run **%s** function", function.__name__)
