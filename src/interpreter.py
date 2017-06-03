@@ -1,7 +1,6 @@
 import sys
 import logging
 import pprint
-import copy
 
 from constants import PLUS, MINUS, MULTIPLY, DIVIDE, INTEGER, EOF, LEFT_BRACKET, RIGHT_BRACKET
 from constants import sign_to_token, operators, brackets, tokens
@@ -19,7 +18,7 @@ class Interpreter(object):
         self.current_token_number = 0
 
     def error(self, token, pos):
-        print('Unexpected token {0} at {1}'.format(token.type, pos))
+        sys.stderr.write('Unexpected token {0} at {1}'.format(token.type, pos))
         sys.exit(-1)
 
     def get_multidigit_integer(self, start_pos):
